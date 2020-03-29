@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 	{
 		GSSYS.renderClear();
 		GSGRA.renderTexture("text1", rectSrc, rectDst, 100, 0.0, 0, 0);
-		GSGRA.renderTexture("tr01", rectSrc, rectDst, 999999, 0.0, frames, 0);
+		GSGRA.renderTexture("tr01", rectSrc, rectDstBack, 999999, 0.0, frames, 0);
 		GSGRA.renderTexture("sora", rectSrc, rectDstBack, 1, 0.0, 0, 0);
 		GSGRA.renderTexture("shama", rectSrc, rectDstS, 20, 5.0, 0, 0);
 		//GSSYS.renderToBuffer();
@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 		if (GSEVT.windowClose()) break;
 		if (GSEVT.keyDown(SDL_SCANCODE_ESCAPE)) break;
 		if (GSEVT.keyDown(SDL_SCANCODE_RETURN)) GSAUD.play("se_confirm", GS_CHNL_SE, 0);
-		frames++;
+		frames+=3;
 	}
 
 	return 0;

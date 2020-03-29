@@ -75,6 +75,7 @@ class TransitionTexture : public TextureBasic
 {
 private:
     SDL_Texture* tex_ = nullptr;
+    // uint8_t** bitmap = nullptr;
     SDL_Surface* sur_orig = nullptr;
     int w_ = -1, h_ = -1;
     std::string path_;

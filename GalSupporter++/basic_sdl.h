@@ -31,12 +31,14 @@ private:
     SDL_Renderer*   renderer_  = nullptr;
     SDL_Texture*    texbuf_    = nullptr;
 public:
+    // Basic APIs
     GS_System();
     ~GS_System();
     SDL_Texture* imgLoad(const std::string& path);
     SDL_Texture* textLoad(const std::u8string& utf8string, TTF_Font* font, SDL_Color color, Uint32 width);
     SDL_Texture* surfaceLoad(SDL_Surface* sur);
-    SDL_Texture* transitionLoad(SDL_Surface* tr, uint8_t frame);
+    SDL_Texture* textureCreate(uint32_t fmt, int access, int w, int h);
+    void transitionLoad(SDL_Surface* tr, uint8_t frame, SDL_Texture* dst);
 private:
     std::multimap<int, GS_RenderInfo> renderinfo_;
     

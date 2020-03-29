@@ -191,9 +191,9 @@ void TransitionTexture::render(SDL_Rect srcRect, SDL_Rect dstRect, int z, double
 {
 
 	if (!sur_orig) load();
-	if (tex_) SDL_DestroyTexture(tex_);
-	tex_ = GSSYS.transitionLoad(sur_orig, param0 % 256);
-	SDL_SetTextureBlendMode(tex_, SDL_BLENDMODE_BLEND);
+	// if (tex_) SDL_DestroyTexture(tex_);
+	GSSYS.transitionLoad(sur_orig, param0 & 0xFF, tex_);
+	SDL_SetTextureBlendMode(tex_, SDL_BLENDMODE_MOD);
 
 
 
@@ -244,6 +244,9 @@ void TransitionTexture::render(SDL_Rect srcRect, SDL_Rect dstRect, int z, double
 void TransitionTexture::load()
 {
 	sur_orig = IMG_Load(path_.c_str());
+	w_ = sur_orig->w;
+	h_ = sur_orig->h;
+	tex_ = GSSYS.textureCreate(SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, w_, h_);
 	if (!sur_orig)
 	{
 		LOG_WARNING
@@ -258,5 +261,11 @@ void TransitionTexture::load()
 void TransitionTexture::unload()
 {
 	if (sur_orig)
+	{
 		SDL_FreeSurface(sur_orig);
+	}
+	if (tex_)
+	{
+		SDL_DestroyTexture(tex_);
+	}
 }

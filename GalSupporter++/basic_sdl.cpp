@@ -126,17 +126,16 @@ SDL_Texture* GS_System::surfaceLoad(SDL_Surface* sur)
 	return SDL_CreateTextureFromSurface(renderer_, sur);
 }
 
-SDL_Texture* GS_System::transitionLoad(SDL_Surface* tr, uint8_t frame)
+SDL_Texture* GS_System::textureCreate(uint32_t fmt, int access, int w, int h)
 {
-	SDL_Surface* tr_filtered =
-		SDL_CreateRGBSurface(0, tr->w, tr->h, 32,
-			0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
-	SDL_memset(tr_filtered->pixels, 0, tr_filtered->pitch * tr->h);
+	return SDL_CreateTexture(renderer_, fmt, access, w, h);
+}
 
-	//SDL_LockSurface(tr);
-	//SDL_LockSurface(tr_filtered);
-
-
+void GS_System::transitionLoad(SDL_Surface* tr, uint8_t frame, SDL_Texture* dst)
+{
+	uint32_t* dst_pixels = nullptr;
+	int dst_pitch = 0;
+	SDL_LockTexture(dst, nullptr, (void**)&dst_pixels, &dst_pitch);
 
 	for (int i = 0; i < (tr->w * tr->h); ++i)
 	{
@@ -148,20 +147,14 @@ SDL_Texture* GS_System::transitionLoad(SDL_Surface* tr, uint8_t frame)
 		SDL_GetRGBA(curPixel, tr->format, &index, &dummy, &dummy, &dummy);
 		if (index >= frame)
 		{
-			((uint32_t*)(tr_filtered->pixels))[i] = 0xffffffff;
+			(dst_pixels)[i] = 0xff000000 + frame * 0x010101;
 		}
 		else
 		{
-			((uint32_t*)(tr_filtered->pixels))[i] = 0xff000000;
+			(dst_pixels)[i] = 0xff000000;
 		}
 	}
-	//SDL_UnlockSurface(tr_filtered);
-	
-	//SDL_UnlockSurface(tr);
-	//SDL_SaveBMP(tr_filtered, "test.bmp");
-	SDL_Texture* tex = SDL_CreateTextureFromSurface(renderer_, tr_filtered);
-	SDL_FreeSurface(tr_filtered);
-	return tex;
+	SDL_UnlockTexture(dst);
 }
 
 void GS_System::renderClear()
